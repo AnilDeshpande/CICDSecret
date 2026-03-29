@@ -16,3 +16,5 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Build debug APK
+        run: chmod +x ./gradlew && ./gradlew assembleDebug
