@@ -19,6 +19,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // ⚠️ WRONG: Hardcoded API key — DO NOT do this in real projects!
+        buildConfigField("String", "DEMO_API_KEY", "\"hardcoded_fake_key_123\"")
     }
 
     buildTypes {

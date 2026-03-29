@@ -60,9 +60,14 @@ fun SecretStatusScreen(modifier: Modifier = Modifier) {
             color = Color.Gray
         )
         Text(
-            text = "❌ NOT CONFIGURED",
+            text = "✅ Secret configured",
             style = MaterialTheme.typography.titleMedium,
-            color = Color.Red
+            color = Color(0xFF2E7D32)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Key: ${BuildConfig.DEMO_API_KEY}",
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
