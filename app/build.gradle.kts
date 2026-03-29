@@ -1,7 +1,21 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
+
+// ── Load local.properties ───────────────────────────────────────────
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
+}
+
+val demoApiKey: String = localProperties.getProperty("DEMO_API_KEY")
+    ?: error("DEMO_API_KEY not found in local.properties. Add it before building.")
+// ─────────────────────────────────────────────────────────────────────
 
 android {
     namespace = "com.codetutor.cicdsecret"
@@ -20,8 +34,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // ⚠️ WRONG: Hardcoded API key — DO NOT do this in real projects!
-        buildConfigField("String", "DEMO_API_KEY", "\"hardcoded_fake_key_123\"")
+        // ✅ RIGHT: Read secret from local.properties — never hardcoded, never in source control
+        buildConfigField("String", "DEMO_API_KEY", "\"$demoApiKey\"")
     }
 
     buildTypes {
