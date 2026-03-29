@@ -37,6 +37,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SecretStatusScreen(modifier: Modifier = Modifier) {
+    val apiKey = BuildConfig.DEMO_API_KEY
+    val isConfigured = apiKey.isNotBlank()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -59,16 +62,34 @@ fun SecretStatusScreen(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.labelMedium,
             color = Color.Gray
         )
-        Text(
-            text = "✅ Secret configured",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF2E7D32)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Key: ${BuildConfig.DEMO_API_KEY}",
-            style = MaterialTheme.typography.bodyMedium
-        )
+        if (isConfigured) {
+            Text(
+                text = "✅ Secret configured",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color(0xFF2E7D32)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Key: ${maskKey(apiKey)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+        } else {
+            Text(
+                text = "❌ NOT CONFIGURED",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Red
+            )
+        }
+    }
+}
+
+/** Show first 3 and last 3 characters, mask the middle with "…" */
+private fun maskKey(key: String): String {
+    return if (key.length > 6) {
+        "${key.take(3)}…${key.takeLast(3)}"
+    } else {
+        "***"
     }
 }
 
