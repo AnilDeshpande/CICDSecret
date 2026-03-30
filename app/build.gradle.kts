@@ -13,8 +13,9 @@ val localProperties = Properties().apply {
     }
 }
 
-val demoApiKey: String = localProperties.getProperty("DEMO_API_KEY")
-    ?: error("DEMO_API_KEY not found in local.properties. Add it before building.")
+val demoApiKey: String = System.getenv("DEMO_API_KEY")          // CI: from GitHub secret
+    ?: localProperties.getProperty("DEMO_API_KEY")               // Local: from local.properties
+    ?: error("DEMO_API_KEY not found. Set it as an env var (CI) or in local.properties (local dev).")
 // ─────────────────────────────────────────────────────────────────────
 
 android {
