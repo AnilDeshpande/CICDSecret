@@ -17,6 +17,8 @@ jobs:
           java-version: '21'
 
       - name: Build debug APK
+        env:
+          DEMO_API_KEY: ${{ secrets.DEMO_API_KEY }}
         run: chmod +x ./gradlew && ./gradlew assembleDebug
 
       - name: Upload APK
