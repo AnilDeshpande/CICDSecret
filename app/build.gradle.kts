@@ -13,7 +13,8 @@ val localProperties = Properties().apply {
 }
 
 
-val demoApiKey: String = localProperties.getProperty("DEMO_API_KEY")
+val demoApiKey: String = System.getenv("DEMO_API_KEY")
+    ?:localProperties.getProperty("DEMO_API_KEY") //Local run
     ?: error("DEMO_API_KEY not found in local.properties. Add it before building.")
 
 android {
