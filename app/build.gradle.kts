@@ -1,7 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
+}
+
+
+val demoApiKey: String = localProperties.getProperty("DEMO_API_KEY")
+    ?: error("DEMO_API_KEY not found in local.properties. Add it before building.")
 
 android {
     namespace = "com.codetutor.cicdsecret"
@@ -11,13 +24,15 @@ android {
         }
     }
 
+
+
     defaultConfig {
         applicationId = "com.codetutor.cicdsecret"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "DEMO_API_KEY", "\"$demoApiKey\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
