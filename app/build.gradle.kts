@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// ── Load local.properties ───────────────────────────────────────────
 val localProperties = Properties().apply {
     val localPropertiesFile = rootProject.file("local.properties")
     if (localPropertiesFile.exists()) {
@@ -12,10 +13,10 @@ val localProperties = Properties().apply {
     }
 }
 
-
-val demoApiKey: String = System.getenv("DEMO_API_KEY")
-    ?:localProperties.getProperty("DEMO_API_KEY") //Local run
-    ?: error("DEMO_API_KEY not found in local.properties. Add it before building.")
+val demoApiKey: String = System.getenv("DEMO_API_KEY")          // CI: from GitHub secret
+    ?: localProperties.getProperty("DEMO_API_KEY")               // Local: from local.properties
+    ?: error("DEMO_API_KEY not found. Set it as an env var (CI) or in local.properties (local dev).")
+// ─────────────────────────────────────────────────────────────────────
 
 android {
     namespace = "com.codetutor.cicdsecret"
@@ -25,16 +26,17 @@ android {
         }
     }
 
-
-
     defaultConfig {
         applicationId = "com.codetutor.cicdsecret"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        buildConfigField("String", "DEMO_API_KEY", "\"$demoApiKey\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // ✅ RIGHT: Read secret from local.properties — never hardcoded, never in source control
+        buildConfigField("String", "DEMO_API_KEY", "\"$demoApiKey\"")
     }
 
     buildTypes {
